@@ -1,4 +1,9 @@
-﻿namespace TaskManager.API.Tests.Fixtures;
+﻿using Bogus;
+
+using TaskManager.API.Models;
+using TaskManager.Core.Entities;
+
+namespace TaskManager.TestUtils.Fixtures;
 
 public static class TaskFixtures
 {
@@ -38,12 +43,6 @@ public static class TaskFixtures
         return faker.Generate();
     }
 
-
-    public static CreateTaskRequest GetValidCreateTaskRequest()
-    {
-        return _createTaskRequestFaker.Generate();
-    }
-
     public static CreateTaskRequest GetInvalidCreateTaskRequest()
     {
         return new CreateTaskRequest(
@@ -60,6 +59,17 @@ public static class TaskFixtures
             .RuleFor(t => t.UserId, userId)
             .Generate(count);
     }
+
+    public static TaskItem CreateValidTask() => _createTaskRequestFaker.Generate();
+
+    public static TaskItem CreateValidTask(Guid userId) => _createTaskRequestFaker.RuleFor(t => t.UserId, userId).Generate();
+
+    public static CreateTaskRequest GetValidCreateTaskRequest()
+    {
+        return _createTaskRequestFaker.Generate();
+    }
+
+    public static List<TaskItem> CreateTaskList(int count) => _taskItemFaker.Generate(count);
 }
 
 public static class BogusExtensions

@@ -24,7 +24,7 @@ public class TasksControllerTests
             userId: request.UserId
         );
 
-        _taskServiceMock.Setup(x => x.CreateTaskAsync(It.IsAny<TaskItem>()))
+        _taskServiceMock.Setup(x => x.CreateTaskAsync(It.IsAny<TaskItem>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedTask);
 
         // Act
@@ -40,7 +40,7 @@ public class TasksControllerTests
             t.Title == request.Title &&
             t.Description == request.Description &&
             t.DueDate == request.DueDate &&
-            t.UserId == request.UserId)), Times.Once);
+            t.UserId == request.UserId), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Theory(DisplayName = "GetUserTasks retorna lista de tarefas correta para cada cenário")]
@@ -51,7 +51,7 @@ public class TasksControllerTests
         // Arrange
         var tasks = TaskFixtures.GetTaskItemsForUser(userId, taskCount);
 
-        _taskServiceMock.Setup(x => x.GetUserTasksAsync(userId))
+        _taskServiceMock.Setup(x => x.GetUserTasksAsync(userId, CancellationToken.None))
             .ReturnsAsync(tasks);
 
         // Act
@@ -63,7 +63,7 @@ public class TasksControllerTests
         returnedTasks.Should().HaveCount(taskCount);
         returnedTasks.Should().OnlyContain(t => tasks.Any(original => original.Id == t.Id));
 
-        _taskServiceMock.Verify(x => x.GetUserTasksAsync(userId), Times.Once);
+        _taskServiceMock.Verify(x => x.GetUserTasksAsync(userId, CancellationToken.None), Times.Once);
     }
 
     public static IEnumerable<object[]> GetUserTasksTestData()
@@ -80,7 +80,7 @@ public class TasksControllerTests
         // Arrange
         var taskId = Guid.NewGuid();
 
-        _taskServiceMock.Setup(x => x.CompleteTaskAsync(taskId))
+        _taskServiceMock.Setup(x => x.CompleteTaskAsync(taskId, CancellationToken.None))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -88,7 +88,7 @@ public class TasksControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-        _taskServiceMock.Verify(x => x.CompleteTaskAsync(taskId), Times.Once);
+        _taskServiceMock.Verify(x => x.CompleteTaskAsync(taskId, CancellationToken.None), Times.Once);
     }
 
     [Fact(DisplayName = "DeleteTask com ID válido retorna NoContent")]
@@ -98,7 +98,7 @@ public class TasksControllerTests
         // Arrange
         var taskId = Guid.NewGuid();
 
-        _taskServiceMock.Setup(x => x.DeleteTaskAsync(taskId))
+        _taskServiceMock.Setup(x => x.DeleteTaskAsync(taskId, CancellationToken.None))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -106,6 +106,6 @@ public class TasksControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-        _taskServiceMock.Verify(x => x.DeleteTaskAsync(taskId), Times.Once);
+        _taskServiceMock.Verify(x => x.DeleteTaskAsync(taskId, CancellationToken.None), Times.Once);
     }
 }

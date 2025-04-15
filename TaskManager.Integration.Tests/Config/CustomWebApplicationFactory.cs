@@ -1,4 +1,4 @@
-﻿namespace TaskManager.API.Tests.Integration.Config;
+﻿namespace TaskManager.Integration.Tests.Config;
 
 /// <summary>
 /// Factory for bootstrapping the application in memory for integration tests.

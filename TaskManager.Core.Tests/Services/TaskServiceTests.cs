@@ -19,14 +19,14 @@ public class TaskServiceTests
     {
         // Arrange
         var task = TaskFixtures.CreateValidTask();
-        _repositoryMock.Setup(x => x.AddAsync(task)).ReturnsAsync(task);
+        _repositoryMock.Setup(x => x.AddAsync(task, CancellationToken.None)).ReturnsAsync(task);
 
         // Act
-        var result = await _service.CreateTaskAsync(task);
+        var result = await _service.CreateTaskAsync(task, CancellationToken.None);
 
         // Assert
         result.Should().BeEquivalentTo(task);
-        _repositoryMock.Verify(x => x.AddAsync(task), Times.Once);
+        _repositoryMock.Verify(x => x.AddAsync(task, CancellationToken.None), Times.Once);
         VerifyLogger(LogLevel.Information, $"Creating new task for user {task.UserId}");
         VerifyLogger(LogLevel.Information, $"Created task {task.Id} for user {task.UserId}");
     }
@@ -39,7 +39,7 @@ public class TaskServiceTests
         const string expectedError = "Task object cannot be null";
 
         // Act & Assert
-        await _service.Invoking(s => s.CreateTaskAsync(null!))
+        await _service.Invoking(s => s.CreateTaskAsync(null!, CancellationToken.None))
             .Should().ThrowAsync<ValidationException>()
             .WithMessage(expectedError);
 
@@ -60,10 +60,10 @@ public class TaskServiceTests
         // Arrange
         var userId = Guid.NewGuid();
         var tasks = TaskFixtures.CreateTaskList(3);
-        _repositoryMock.Setup(x => x.GetByUserIdAsync(userId)).ReturnsAsync(tasks);
+        _repositoryMock.Setup(x => x.GetByUserIdAsync(userId, CancellationToken.None)).ReturnsAsync(tasks);
 
         // Act
-        var result = await _service.GetUserTasksAsync(userId);
+        var result = await _service.GetUserTasksAsync(userId, CancellationToken.None);
 
         // Assert
         result.Should().BeEquivalentTo(tasks);
@@ -77,10 +77,10 @@ public class TaskServiceTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        _repositoryMock.Setup(x => x.GetByUserIdAsync(userId)).ReturnsAsync(new List<TaskItem>());
+        _repositoryMock.Setup(x => x.GetByUserIdAsync(userId, CancellationToken.None)).ReturnsAsync(new List<TaskItem>());
 
         // Act
-        var result = await _service.GetUserTasksAsync(userId);
+        var result = await _service.GetUserTasksAsync(userId, CancellationToken.None);
 
         // Assert
         result.Should().BeEmpty();
@@ -93,14 +93,14 @@ public class TaskServiceTests
     {
         // Arrange
         var task = TaskFixtures.CreateValidTask();
-        _repositoryMock.Setup(x => x.GetByIdAsync(task.Id, true)).ReturnsAsync(task);
+        _repositoryMock.Setup(x => x.GetByIdAsync(task.Id, CancellationToken.None, true)).ReturnsAsync(task);
 
         // Act
-        await _service.CompleteTaskAsync(task.Id);
+        await _service.CompleteTaskAsync(task.Id, CancellationToken.None);
 
         // Assert
         task.IsCompleted.Should().BeTrue();
-        _repositoryMock.Verify(x => x.UpdateAsync(task), Times.Once);
+        _repositoryMock.Verify(x => x.UpdateAsync(task, CancellationToken.None), Times.Once);
         VerifyLogger(LogLevel.Information, $"Task {task.Id} marked as completed");
     }
 
@@ -110,10 +110,10 @@ public class TaskServiceTests
     {
         // Arrange
         var taskId = Guid.NewGuid();
-        _repositoryMock.Setup(x => x.GetByIdAsync(taskId, true)).ReturnsAsync((TaskItem?)null);
+        _repositoryMock.Setup(x => x.GetByIdAsync(taskId, CancellationToken.None, true)).ReturnsAsync((TaskItem?)null);
 
         // Act & Assert
-        await _service.Invoking(s => s.CompleteTaskAsync(taskId))
+        await _service.Invoking(s => s.CompleteTaskAsync(taskId, CancellationToken.None))
             .Should().ThrowAsync<NotFoundException>()
             .WithMessage($"Task with id {taskId} not found");
 
@@ -126,13 +126,13 @@ public class TaskServiceTests
     {
         // Arrange
         var task = TaskFixtures.CreateValidTask();
-        _repositoryMock.Setup(x => x.GetByIdAsync(task.Id, true)).ReturnsAsync(task);
+        _repositoryMock.Setup(x => x.GetByIdAsync(task.Id, CancellationToken.None, true)).ReturnsAsync(task);
 
         // Act
-        await _service.DeleteTaskAsync(task.Id);
+        await _service.DeleteTaskAsync(task.Id, CancellationToken.None);
 
         // Assert
-        _repositoryMock.Verify(x => x.DeleteAsync(task.Id), Times.Once);
+        _repositoryMock.Verify(x => x.DeleteAsync(task.Id, CancellationToken.None), Times.Once);
         VerifyLogger(LogLevel.Information, $"Task {task.Id} deleted successfully");
     }
 
@@ -142,10 +142,10 @@ public class TaskServiceTests
     {
         // Arrange
         var taskId = Guid.NewGuid();
-        _repositoryMock.Setup(x => x.GetByIdAsync(taskId, true)).ReturnsAsync((TaskItem?)null);
+        _repositoryMock.Setup(x => x.GetByIdAsync(taskId, CancellationToken.None, true)).ReturnsAsync((TaskItem?)null);
 
         // Act & Assert
-        await _service.Invoking(s => s.DeleteTaskAsync(taskId))
+        await _service.Invoking(s => s.DeleteTaskAsync(taskId, CancellationToken.None))
             .Should().ThrowAsync<NotFoundException>()
             .WithMessage($"Task with id {taskId} not found");
 
