@@ -1,4 +1,4 @@
-﻿namespace TaskManager.API.Tests.Integration;
+﻿namespace TaskManager.Integration.Tests.Controllers;
 
 public class TasksControllerIntegrationTests : BaseIntegrationTest
 {

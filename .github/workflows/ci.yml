@@ -25,6 +25,10 @@ jobs:
           cat coveragereport/core/Summary.txt
           echo "===== API Coverage ====="
           cat coveragereport/api/Summary.txt
+          echo "===== Infra Coverage ====="
+          cat coveragereport/infra/Summary.txt
+          echo "===== Integration Coverage ====="
+          cat coveragereport/integration/Summary.txt
 
   docker-build:
     runs-on: ubuntu-latest
