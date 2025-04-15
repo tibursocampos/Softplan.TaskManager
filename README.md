@@ -17,6 +17,7 @@ TaskManager is a .NET API for task management. It includes features like task cr
 - [How to Run](#how-to-run)
 - [Initial Data (Seed Data)](#initial-data-seed-data)
 - [Examples](#examples)
+- [Traceability and Logs](#traceability-and-logs)
 
 ---
 
@@ -34,12 +35,14 @@ TaskManager is a .NET API for task management. It includes features like task cr
 
 ```text
 TaskManager/
-├── TaskManager.sln          # Solution file
-├── TaskManager.API          # API project
-├── TaskManager.Core         # Core business logic
-├── TaskManager.Infra        # Infrastructure (data access)
-├── TaskManager.API.Tests    # API unit and integration tests
-├── TaskManager.Core.Tests   # Core unit tests
+├── TaskManager.sln                  # Solution file
+├── TaskManager.API                  # API project
+├── TaskManager.Core                 # Core business logic
+├── TaskManager.Infra                # Infrastructure (data access)
+├── TaskManager.Integration.Tests    # Integration tests
+├── TaskManager.API.Tests            # API unit tests
+├── TaskManager.Core.Tests           # Core unit tests
+├── TaskManager.Infra.Tests          # Infra unit tests (repositories)
 ```
 ---
 
@@ -207,6 +210,39 @@ POST /api/tasks
     "dueDate": "2023-12-31T23:59:59Z",
     "isCompleted": false
 }
+
+```
+## Traceability and Logs
+
+To facilitate request tracking and debugging, we implemented a structured logging pattern that includes a Correlation ID. This allows tracing the flow of a request across all logs generated during its processing.
+
+### Logging Pattern
+
+Logs follow the format below:
+
+```text
+[Timestamp] [Log Level] [Correlation ID] Message
 ```
 
+* Timestamp: Indicates the date and time when the log was generated.
+* Log Level: Indicates the log severity (INFO, WARN, ERROR, etc.).
+* Correlation ID: A unique identifier for each request, enabling tracking of all related log messages.
+* Message: The actual log message.
+
+### Log Examples
+
+Below is an example of logs generated during the processing of some requests:
+
+```text
+2025-04-15 17:50:19 [20:50:19 INF] [23e11ef7] Request: DELETE /api/Tasks/28e2c7e5-3ad3-4a2e-8c71-7b75c8969c5a
+2025-04-15 17:50:19 [20:50:19 INF] [23e11ef7] Executing endpoint 'TaskManager.API.Controllers.TasksController.DeleteTask (TaskManager.API)'
+2025-04-15 17:50:19 [20:50:19 INF] [23e11ef7] Route matched with {action = "DeleteTask", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteTask(System.Guid) on controller TaskManager.API.Controllers.TasksController (TaskManager.API).
+2025-04-15 17:50:19 [20:50:19 WRN] [23e11ef7] Task not found for deletion: 28e2c7e5-3ad3-4a2e-8c71-7b75c8969c5a
+2025-04-15 17:50:19 [20:50:19 INF] [23e11ef7] Executed action TaskManager.API.Controllers.TasksController.DeleteTask (TaskManager.API) in 46.6494ms
+2025-04-15 17:50:19 [20:50:19 INF] [23e11ef7] Executed endpoint 'TaskManager.API.Controllers.TasksController.DeleteTask (TaskManager.API)'
+2025-04-15 17:50:19 [20:50:19 ERR] [23e11ef7] Exception: NotFoundException | Status: 404 | Path: /api/Tasks/28e2c7e5-3ad3-4a2e-8c71-7b75c8969c5a | Duration: 72ms
+2025-04-15 17:50:19 TaskManager.Core.Exceptions.NotFoundException: Task with id 28e2c7e5-3ad3-4a2e-8c71-7b75c8969c5a not found
+```
+
+Note that each request has a unique Correlation ID, making it easy to identify all logs related to a specific request.
 
