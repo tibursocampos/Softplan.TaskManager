@@ -19,22 +19,22 @@ public class TaskService : ITaskService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<TaskItem> CreateTaskAsync(TaskItem task)
+    public async Task<TaskItem> CreateTaskAsync(TaskItem task, CancellationToken cancellationToken)
     {
         if (task is null)
             throw new ValidationException("Task object cannot be null");
 
         _logger.LogInformation("Creating new task for user {UserId}", task.UserId);
-        var createdTask = await _taskRepository.AddAsync(task);
+        var createdTask = await _taskRepository.AddAsync(task, cancellationToken);
         _logger.LogInformation("Created task {TaskId} for user {UserId}", createdTask.Id, task.UserId);
 
         return createdTask;
     }
 
-    public async Task<IEnumerable<TaskItem>> GetUserTasksAsync(Guid userId)
+    public async Task<IEnumerable<TaskItem>> GetUserTasksAsync(Guid userId, CancellationToken cancellationToken)
     {
         _logger.LogDebug("Fetching tasks for user {UserId}", userId);
-        var tasks = await _taskRepository.GetByUserIdAsync(userId);
+        var tasks = await _taskRepository.GetByUserIdAsync(userId, cancellationToken);
 
         if (!tasks.Any())
         {
@@ -46,10 +46,10 @@ public class TaskService : ITaskService
         return tasks;
     }
 
-    public async Task CompleteTaskAsync(Guid taskId)
+    public async Task CompleteTaskAsync(Guid taskId, CancellationToken cancellationToken)
     {
         _logger.LogDebug("Attempting to complete task {TaskId}", taskId);
-        var task = await _taskRepository.GetByIdAsync(taskId, trackEntity: true);
+        var task = await _taskRepository.GetByIdAsync(taskId, cancellationToken, trackEntity: true);
 
         if (task is null)
         {
@@ -58,14 +58,14 @@ public class TaskService : ITaskService
         }
 
         task.MarkAsComplete();
-        await _taskRepository.UpdateAsync(task);
+        await _taskRepository.UpdateAsync(task, cancellationToken);
         _logger.LogInformation("Task {TaskId} marked as completed", taskId);
     }
 
-    public async Task DeleteTaskAsync(Guid taskId)
+    public async Task DeleteTaskAsync(Guid taskId, CancellationToken cancellationToken)
     {
         _logger.LogDebug("Attempting to delete task {TaskId}", taskId);
-        var task = await _taskRepository.GetByIdAsync(taskId, trackEntity: true);
+        var task = await _taskRepository.GetByIdAsync(taskId, cancellationToken, trackEntity: true);
 
         if (task is null)
         {
@@ -73,7 +73,7 @@ public class TaskService : ITaskService
             throw new NotFoundException($"Task with id {taskId} not found");
         }
 
-        await _taskRepository.DeleteAsync(taskId);
+        await _taskRepository.DeleteAsync(taskId, cancellationToken);
         _logger.LogInformation("Task {TaskId} deleted successfully", taskId);
     }
 }
