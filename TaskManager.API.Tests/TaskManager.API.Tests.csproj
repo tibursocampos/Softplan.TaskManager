@@ -28,8 +28,4 @@
     <ProjectReference Include="..\TaskManager.API\TaskManager.API.csproj" />
   </ItemGroup>
 
-  <Target Name="CopyDepsFile" AfterTargets="Build">
-    <Copy SourceFiles="$(SolutionDir)TaskManager.API\bin\$(Configuration)\net8.0\TaskManager.API.deps.json" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
-  </Target>
-
 </Project>
