@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="35.6.3" />
     <PackageReference Include="FluentAssertions" Version="8.2.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.15" />
@@ -26,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.API\TaskManager.API.csproj" />
+    <ProjectReference Include="..\TaskManager.TestUtils\TaskManager.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>

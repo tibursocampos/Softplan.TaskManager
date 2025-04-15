@@ -1,4 +1,10 @@
-﻿namespace TaskManager.API.Tests.Fixtures;
+﻿using Microsoft.AspNetCore.Http;
+
+using System.Text;
+
+using TaskManager.Core.Exceptions;
+
+namespace TaskManager.TestUtils.Fixtures;
 
 public static class MiddlewareFixtures
 {
@@ -15,9 +21,7 @@ public static class MiddlewareFixtures
         context.Response.Body = new MemoryStream();
 
         if (!string.IsNullOrEmpty(correlationId))
-        {
             context.Response.Headers["X-Correlation-ID"] = correlationId;
-        }
 
         return context;
     }

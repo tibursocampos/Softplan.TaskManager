@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="35.6.3" />
     <PackageReference Include="FluentAssertions" Version="8.2.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.15" />
@@ -21,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.API\TaskManager.API.csproj" />
+    <ProjectReference Include="..\TaskManager.TestUtils\TaskManager.TestUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
