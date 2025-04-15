@@ -13,10 +13,10 @@ TaskManager is a .NET API for task management. It includes features like task cr
 - [Project Structure](#project-structure)
 - [Libraries and Tools Used](#libraries-and-tools-used)
 - [Tests](#tests)
+- [Continuous Integration (CI)](#continuous-integration-ci)
 - [How to Run](#how-to-run)
 - [Initial Data (Seed Data)](#initial-data-seed-data)
 - [Examples](#examples)
-- [Continuous Integration (CI)](#continuous-integration-ci)
 
 ---
 
@@ -67,6 +67,27 @@ TaskManager/
 
 - Located in `TaskManager.API.Tests/Integration`.
 - Test the API endpoints with an in-memory database.
+
+---
+
+## Continuous Integration (CI)
+
+This project uses **GitHub Actions** for continuous integration. The CI pipeline runs automatically on:
+
+- Every pull request targeting the `main` or `dev` branches.
+- Manual triggers via the GitHub interface (`workflow_dispatch`).
+
+### CI Steps
+
+The CI workflow performs the following:
+
+1. **Checkout the code** from the repository.
+2. **Set up Docker Buildx** for multi-platform builds.
+3. **Run all tests** using `docker compose`, ensuring correctness and stability.
+4. **Display test coverage summaries** for both the Core, Infra and API projects.
+5. **Build the API Docker image** for deployment or further usage.
+
+The workflow is defined in `.github/workflows/ci.yml`.
 
 ---
 
@@ -187,24 +208,5 @@ POST /api/tasks
     "isCompleted": false
 }
 ```
----
 
-## Continuous Integration (CI)
-
-This project uses **GitHub Actions** for continuous integration. The CI pipeline runs automatically on:
-
-- Every pull request targeting the `main` or `dev` branches.
-- Manual triggers via the GitHub interface (`workflow_dispatch`).
-
-### CI Steps
-
-The CI workflow performs the following:
-
-1. **Checkout the code** from the repository.
-2. **Set up Docker Buildx** for multi-platform builds.
-3. **Run all tests** using `docker compose`, ensuring correctness and stability.
-4. **Display test coverage summaries** for both the Core and API projects.
-5. **Build the API Docker image** for deployment or further usage.
-
-The workflow is defined in `.github/workflows/ci.yml`.
 
