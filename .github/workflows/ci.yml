@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [ dev ]
   pull_request:
     branches: [ main, dev ]
   workflow_dispatch:
@@ -15,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker Build
         uses: docker/setup-buildx-action@v2
 
       - name: Run test container
