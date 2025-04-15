@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using TaskManager.Core.Exceptions;
 
 namespace TaskManager.TestUtils.Fixtures;
 
+[ExcludeFromCodeCoverage]
 public static class MiddlewareFixtures
 {
     public static HttpContext CreateHttpContext(
