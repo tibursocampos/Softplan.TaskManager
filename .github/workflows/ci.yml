@@ -28,12 +28,6 @@ jobs:
           echo "===== API Coverage ====="
           cat coveragereport/api/Summary.txt
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@3e40f552c57e6aa09a917cb3c1b7b6b81e3c0b34
-        with:
-          name: code-coverage-report
-          path: coveragereport/
-
   docker-build:
     runs-on: ubuntu-latest
     needs: build-and-test
