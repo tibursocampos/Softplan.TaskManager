@@ -16,6 +16,7 @@ TaskManager is a .NET API for task management. It includes features like task cr
 
 ## Project Structure
 
+```text
 TaskManager/
 ├── TaskManager.sln          # Solution file
 ├── TaskManager.API          # API project
@@ -23,6 +24,7 @@ TaskManager/
 ├── TaskManager.Infra        # Infrastructure (data access)
 ├── TaskManager.API.Tests    # API unit and integration tests
 ├── TaskManager.Core.Tests   # Core unit tests
+```
 ---
 
 ## Libraries and Tools Used
