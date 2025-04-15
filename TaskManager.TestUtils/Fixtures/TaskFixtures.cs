@@ -1,10 +1,13 @@
 ﻿using Bogus;
 
+using System.Diagnostics.CodeAnalysis;
+
 using TaskManager.API.Models;
 using TaskManager.Core.Entities;
 
 namespace TaskManager.TestUtils.Fixtures;
 
+[ExcludeFromCodeCoverage]
 public static class TaskFixtures
 {
     private static readonly Faker<CreateTaskRequest> _createTaskRequestFaker = new Faker<CreateTaskRequest>()
