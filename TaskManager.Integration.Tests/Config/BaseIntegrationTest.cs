@@ -1,4 +1,4 @@
-﻿namespace TaskManager.API.Tests.Integration.Config;
+﻿namespace TaskManager.Integration.Tests.Config;
 
 /// <summary>
 /// Base class for API integration tests providing common utilities and configured test dependencies.
@@ -96,9 +96,7 @@ public abstract class BaseIntegrationTest : IClassFixture<CustomWebApplicationFa
         var content = await response.Content.ReadAsStringAsync();
 
         if (string.IsNullOrWhiteSpace(content))
-        {
             throw new InvalidOperationException("Response content is null or empty");
-        }
 
         return JsonSerializer.Deserialize<T>(content, _jsonOptions)
                ?? throw new InvalidOperationException("Deserialization returned null");

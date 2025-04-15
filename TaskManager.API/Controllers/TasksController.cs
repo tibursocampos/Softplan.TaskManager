@@ -29,7 +29,7 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
     {
         TaskItem task = request;
-        var createdTask = await _taskService.CreateTaskAsync(task);
+        var createdTask = await _taskService.CreateTaskAsync(task, HttpContext?.RequestAborted ?? CancellationToken.None);
 
         return CreatedAtAction(nameof(GetUserTasks), new { userId = createdTask.UserId }, (TaskItemResponse)createdTask);
     }
@@ -42,7 +42,7 @@ public class TasksController : ControllerBase
     [ProducesResponseType(typeof(List<TaskItemResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserTasks(Guid userId)
     {
-        var tasks = await _taskService.GetUserTasksAsync(userId);
+        var tasks = await _taskService.GetUserTasksAsync(userId, HttpContext?.RequestAborted ?? CancellationToken.None);
         return Ok(tasks.Select(task => (TaskItemResponse)task).ToList());
     }
 
@@ -56,7 +56,7 @@ public class TasksController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CompleteTask(Guid id)
     {
-        await _taskService.CompleteTaskAsync(id);
+        await _taskService.CompleteTaskAsync(id, HttpContext?.RequestAborted ?? CancellationToken.None);
         return NoContent();
     }
 
@@ -70,7 +70,7 @@ public class TasksController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
-        await _taskService.DeleteTaskAsync(id);
+        await _taskService.DeleteTaskAsync(id, HttpContext?.RequestAborted ?? CancellationToken.None);
         return NoContent();
     }
 }

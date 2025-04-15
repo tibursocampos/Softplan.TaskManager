@@ -14,41 +14,41 @@ public class TaskRepository : ITaskRepository
         _context = context;
     }
 
-    public async Task<TaskItem> AddAsync(TaskItem task)
+    public async Task<TaskItem> AddAsync(TaskItem task, CancellationToken cancellationToken)
     {
         _context.Tasks.Add(task);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return task;
     }
 
-    public async Task<IEnumerable<TaskItem>> GetByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<TaskItem>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _context.Tasks
             .AsNoTracking()
             .Where(t => t.UserId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<TaskItem?> GetByIdAsync(Guid id, bool trackEntity = false)
+    public async Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool trackEntity = false)
     {
         var query = _context.Tasks.Where(t => t.Id == id);
-        return await (trackEntity ? query : query.AsNoTracking()).FirstOrDefaultAsync();
+        return await (trackEntity ? query : query.AsNoTracking()).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(TaskItem task)
+    public async Task UpdateAsync(TaskItem task, CancellationToken cancellationToken)
     {
         _context.Tasks.Update(task);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var task = await _context.Tasks.FindAsync(id);
         if (task != null)
         {
             _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
