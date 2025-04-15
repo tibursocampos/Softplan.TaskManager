@@ -1,0 +1,28 @@
+Summary
+  Generated on: 04/15/2025 - 14:12:06
+  Coverage date: 04/15/2025 - 14:11:55
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 6
+  Files: 4
+  Line coverage: 91.3%
+  Covered lines: 63
+  Uncovered lines: 6
+  Coverable lines: 69
+  Total lines: 154
+  Branch coverage: 83.3% (10 of 12)
+  Covered branches: 10
+  Total branches: 12
+  Method coverage: 80.9% (17 of 21)
+  Full method coverage: 42.8% (9 of 21)
+  Covered methods: 17
+  Fully covered methods: 9
+  Total methods: 21
+
+TaskManager.Core                                     91.3%
+  TaskManager.Core.Entities.BaseEntity                100%
+  TaskManager.Core.Entities.TaskItem                 94.1%
+  TaskManager.Core.Exceptions.NotFoundException       100%
+  TaskManager.Core.Exceptions.TaskManagerException     75%
+  TaskManager.Core.Exceptions.ValidationException    42.8%
+  TaskManager.Core.Services.TaskService               100%
