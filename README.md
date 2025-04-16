@@ -63,12 +63,12 @@ TaskManager/
 
 ### Unit Tests
 
-- Located in `TaskManager.API.Tests` and `TaskManager.Core.Tests`.
-- Test individual components such as services, controllers, and validators.
+- Located in `TaskManager.API.Tests`, `TaskManager.Core.Tests` and `TaskManager.Core.Tests`.
+- Test individual components such as services, repositories, controllers, and validators.
 
 ### Integration Tests
 
-- Located in `TaskManager.API.Tests/Integration`.
+- Located in `TaskManager.Integration.Tests`.
 - Test the API endpoints with an in-memory database.
 
 ---
